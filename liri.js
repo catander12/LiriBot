@@ -10,6 +10,10 @@ var option = process.argv[2];
 
 var x = process.argv[3];
 
+check();
+
+function check(){
+
 switch(option){
 	case "my-tweets":
 		twitter();
@@ -24,6 +28,7 @@ switch(option){
 		doit();
 		break;
 
+	}
 }
 
 fs.appendFile("./log.txt", option+",",function(){
@@ -36,7 +41,7 @@ fs.appendFile("./log.txt", option+",",function(){
 
 function twitter(){
 
-	console.log("working");
+
 
 	var params = {screen_name: 'james_dimarco_'};
 
@@ -84,18 +89,23 @@ function omdb(){
 
 function spotify(){
 
-	fs.readFile("./random.txt","utf8", function(data){
-		console.log("hellp");
+	fs.readFile("./random.txt","utf8", function(error,data){
+
+		if(error){
+			console.log("Fuck");
+		}
+
 
 		var song = data.split(",");
 	
+	
 
-	yek.spotify.search({ type: 'track', query: song[2] }, function(err, data) {
+	yek.spotify.search({ type: 'track', query: song[1] }, function(err, data) {
 		if (err) {
 		    return console.log('Error occurred: ' + err);
 		 }
 		 
-		console.log(data.tracks.items[0].album.artists[0].name); 
+		console.log(JSON.stringify(data.tracks.items[0].album.artists[0].name,null,2)); 
 
 		fs.appendFile("./log.txt", data.tracks.items[0].album.artists[0].name+",",function(){
 		});
@@ -108,6 +118,23 @@ function spotify(){
 
 function doit(){
 
+	fs.readFile("./random.txt","utf8", function(error,data){
+		
+		if(error){
+			console.log("theres a fucking error");
+		};
+
+
+		var arr = data.split(",");
+
+		option = arr[0];
+
+		x = arr[1];
+		
+		check();
+
+	
+		});
 
 
 }
